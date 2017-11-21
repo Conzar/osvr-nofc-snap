@@ -24,8 +24,7 @@ parts:
     linux-build        :
         after          : [ppa]
         prepare        : ./prepare.bash
-        plugin         : dump
-        source         : './'
+        plugin         : nil
         build-packages :
            # for boost
            - libboost-dev
@@ -51,7 +50,12 @@ parts:
            - libusb-1.0-0-dev
            - markdown
            - python2.7
-        organize      :
+    linux-copy    :
+        after     : [linux-build]
+        plugin    : nil
+        stage     : 
+            - dist
+        organize  :
             'share/osvrcore/sample-configs/renderManager.direct.landscape.HDKv2.0.newtracker.json' : 'conf/'
             'share/osvrcore/displays/OSVR_HDK_2_0.json' : 'displays/'
     nofc-files  :
