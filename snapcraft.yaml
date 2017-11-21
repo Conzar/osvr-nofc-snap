@@ -50,9 +50,6 @@ parts:
            - libusb-1.0-0-dev
            - markdown
            - python2.7
-    linux-copy    :
-        after     : [linux-build]
-        plugin    : nil
         stage     : 
             - dist
         organize  :
