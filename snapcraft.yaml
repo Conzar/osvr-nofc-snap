@@ -1,0 +1,59 @@
+name: 'osvr-nofc'
+version: '0.2.1'
+summary: 'Nolo OSVR Fusion Configuration'
+description: 'This new configuration combines the Nolo-OSVR plugin, the OSVR-Fusion plugin, and the official SteamVR-OSVR driver for a much more enjoyable experience using Nolo hardware with OSVR.'
+grade: devel
+confinement: devmode
+
+# The application to be run
+apps:
+    osvr:
+        command     : bin/osvr_server $SNAP/osvr_server_config.json
+        environment :
+            LD_LIBRARY_PATH : $LD_LIBRARY_PATH:$SNAP
+
+# Sources
+parts:
+    # install ppas
+    ppa                :
+        plugin         : nil
+        prepare        : ./ppa.bash
+        build-packages : [software-properties-common]
+
+    # get the build script to build all of osvr
+    linux-build        :
+        after          : [ppa]
+        prepare        : ./prepare.bash
+        plugin         : dump
+        source         : './'
+        build-packages :
+           # for boost
+           - libboost-dev
+           - libboost-filesystem-dev
+           - libboost-program-options-dev 
+           - libboost-thread-dev
+           # The rest of the dependencies
+           - autotools-dev
+           - autoconf
+           - automake
+           - cmake 
+           - g++-5
+           - gcc-5
+           - git
+           - git-core
+           - libeigen3-dev
+           - libglew-dev
+           - libmarkdown2-dev
+           - libopencv-dev
+           - libtool
+           - libsdl2-dev
+           - libudev-dev
+           - libusb-1.0-0-dev
+           - markdown
+           - python2.7
+        organize      :
+            'share/osvrcore/sample-configs/renderManager.direct.landscape.HDKv2.0.newtracker.json' : 'conf/'
+            'share/osvrcore/displays/OSVR_HDK_2_0.json' : 'displays/'
+    nofc-files  :
+        plugin  : dump
+        source  : 'files'
