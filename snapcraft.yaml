@@ -14,16 +14,17 @@ apps:
 
 # Sources
 parts:
-    # install ppas
+
     ppa                :
         plugin         : nil
         prepare        : ./ppa.bash
         build-packages : [software-properties-common]
 
-    # get the build script to build all of osvr
     linux-build        :
         after          : [ppa]
         prepare        : ./prepare.bash
+        #prepare        : |
+        #         cp -r /home/spethm/Work/MonkyGames/projects/osvr/osvr-ubuntu-build-script/vagrant/build/xenial64/dist .
         plugin         : nil
         build-packages :
            # for boost
@@ -50,11 +51,12 @@ parts:
            - libusb-1.0-0-dev
            - markdown
            - python2.7
-        stage     : 
-            - dist
-        organize  :
+        organize       :
             'share/osvrcore/sample-configs/renderManager.direct.landscape.HDKv2.0.newtracker.json' : 'conf/'
             'share/osvrcore/displays/OSVR_HDK_2_0.json' : 'displays/'
+        install        : |
+            cp -r dist/* $SNAPCRAFT_PART_INSTALL
+
     nofc-files  :
         plugin  : dump
         source  : 'files'
